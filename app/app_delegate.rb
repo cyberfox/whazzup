@@ -53,6 +53,6 @@ class AppDelegate < PM::Delegate
   end
 
   def application(application, didReceiveLocalNotification:notification)
-    schedule(app)
+    schedule(application)
   end
 end
