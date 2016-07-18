@@ -16,6 +16,8 @@ class AppDelegate
     prep_log
     buildMenu
     ask_and_schedule
+    @bundle = NSBundle.mainBundle
+    @bundle_path = @bundle.bundlePath
   end
 
   def ask_early
@@ -38,7 +40,13 @@ class AppDelegate
     @timer = NSTimer.scheduledTimerWithTimeInterval(wait_time, target: self, selector: 'ask_and_schedule', userInfo: nil, repeats: false)
   end
 
+  FMT = NSDateFormatter.new
+  FMT.setDateFormat "ddMMYYYY-HHmmss"
+
   def ask
+    suffix = FMT.stringFromDate Time.now
+    NSLog "%@", @bundle_path
+    system("imagesnap ~/snippet-#{suffix}.png")
     picked = PROMPTS[rand*PROMPTS.length]
     answer = input(picked)
     log(answer)
