@@ -13,11 +13,14 @@ class AppDelegate
              "What\'s on your mind?"]
 
   def applicationDidFinishLaunching(notification)
+    @snap_path = File.join(NSBundle.mainBundle.resourcePath, 'imagesnap')
+    application_support = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, true).first
+    @snippet_path = File.join(application_support, 'Prompter', 'snippets')
+    Motion::FileUtils.mkdir_p(@snippet_path) unless File.exist?(@snippet_path)
+
     prep_log
     buildMenu
     ask_and_schedule
-    @bundle = NSBundle.mainBundle
-    @bundle_path = @bundle.bundlePath
   end
 
   def ask_early
@@ -45,14 +48,15 @@ class AppDelegate
 
   def ask
     suffix = FMT.stringFromDate Time.now
-    NSLog "%@", @bundle_path
-    system("imagesnap ~/snippet-#{suffix}.png")
+
+    image = File.join(@snippet_path, "snippet-#{suffix}.png")
+    system("#{@snap_path.inspect} #{image.inspect}")
     picked = PROMPTS[rand*PROMPTS.length]
     answer = input(picked)
     log(answer)
   end
 
-  def prep_log(file = "#{ENV['HOME']}/snippets.txt")
+  def prep_log(file = File.join(@snippet_path, 'snippets.txt'))
     @snippets ||= open(file, 'ab')
     log('[Starting up (rubymotion)]')
   end

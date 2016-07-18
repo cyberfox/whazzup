@@ -1,5 +1,6 @@
 $:.unshift("/Library/RubyMotion/lib")
 require 'motion/project/template/osx'
+require 'motion-fileutils'
 
 begin
   require 'bundler'
@@ -12,6 +13,4 @@ Motion::Project::App.setup do |app|
   app.name = 'Prompter'
   app.identifier = 'com.cyberfox.Prompter'
   app.codesign_certificate = "3rd Party Mac Developer Application: CyberFOX Software, Inc. (S4CH5TG222)"
-#  app.sdk_version = '10.10'
-#  app.deployment_target = '10.10'
 end
