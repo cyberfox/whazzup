@@ -89,4 +89,9 @@ class AppDelegate
     @mainWindow.orderFrontRegardless
     input("What are you up to?")
   end
+
+  def finderView
+    files = [@snippet_path]
+    NSWorkspace.sharedWorkspace.activateFileViewerSelectingURLs:files
+  end
 end

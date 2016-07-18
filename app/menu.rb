@@ -20,6 +20,10 @@ class AppDelegate
       addItemWithTitle("Quit #{appName}", action: 'terminate:', keyEquivalent: 'q')
     end
 
+    addMenu('File') do
+      addItemWithTitle('Show in Finder', action: 'finderView', keyEquivalent: 'i')
+    end
+
     addMenu('Edit') do
       addItemWithTitle('Undo', action: 'undo:', keyEquivalent: 'z')
       addItemWithTitle('Redo', action: 'redo:', keyEquivalent: 'Z')
