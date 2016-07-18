@@ -57,6 +57,7 @@ class AppDelegate
   end
 
   def prep_log(file = File.join(@snippet_path, 'snippets.txt'))
+    @logfile = file
     @snippets ||= open(file, 'ab')
     log('[Starting up (rubymotion)]')
   end
@@ -91,7 +92,7 @@ class AppDelegate
   end
 
   def finderView
-    files = [@snippet_path]
-    NSWorkspace.sharedWorkspace.activateFileViewerSelectingURLs:files
+    files = [NSURL.fileURLWithPath(@logfile)]
+    NSWorkspace.sharedWorkspace.activateFileViewerSelectingURLs(files)
   end
 end
