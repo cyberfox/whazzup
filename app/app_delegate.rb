@@ -50,7 +50,7 @@ class AppDelegate
     suffix = FMT.stringFromDate Time.now
 
     image = File.join(@snippet_path, "snippet-#{suffix}.png")
-    system("#{@snap_path.inspect} #{image.inspect}")
+    system("#{@snap_path.inspect} -w 0.5 #{image.inspect}")
     picked = PROMPTS[rand*PROMPTS.length]
     answer = input(picked)
     log(answer)
