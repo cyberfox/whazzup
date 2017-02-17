@@ -35,6 +35,7 @@ class AppDelegate
   end
 
   def ask_and_schedule
+    old_app = NSWorkspace.sharedWorkspace.frontmostApplication
     @timer = nil
     begin
       ask
@@ -47,6 +48,7 @@ class AppDelegate
     # -5..5 + 20 yields a range of 15-25 minutes.
     wait_time = (((rand*10).to_i-5)+20)*60
     @timer = NSTimer.scheduledTimerWithTimeInterval(wait_time, target: self, selector: 'ask_and_schedule', userInfo: nil, repeats: false)
+    old_app.activateWithOptions(NSApplicationActivateIgnoringOtherApps)
   end
 
   FMT = NSDateFormatter.new
