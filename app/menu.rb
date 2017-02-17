@@ -9,9 +9,6 @@ class AppDelegate
       addItem(NSMenuItem.separatorItem)
       addItemWithTitle('Preferences', action: 'openPreferences:', keyEquivalent: ',')
       addItem(NSMenuItem.separatorItem)
-      servicesItem = addItemWithTitle('Services', action: nil, keyEquivalent: '')
-      NSApp.servicesMenu = servicesItem.submenu = NSMenu.new
-      addItem(NSMenuItem.separatorItem)
       addItemWithTitle("Hide #{appName}", action: 'hide:', keyEquivalent: 'h')
       item = addItemWithTitle('Hide Others', action: 'hideOtherApplications:', keyEquivalent: 'H')
       item.keyEquivalentModifierMask = NSCommandKeyMask|NSAlternateKeyMask
@@ -34,13 +31,6 @@ class AppDelegate
       addItemWithTitle('Delete', action: 'delete:', keyEquivalent: '')
       addItemWithTitle('Select All', action: 'selectAll:', keyEquivalent: 'a')
     end
-
-    NSApp.windowsMenu = addMenu('Window') do
-      addItemWithTitle('Minimize', action: 'performMiniaturize:', keyEquivalent: 'm')
-      addItemWithTitle('Zoom', action: 'performZoom:', keyEquivalent: '')
-      addItem(NSMenuItem.separatorItem)
-      addItemWithTitle('Bring All To Front', action: 'arrangeInFront:', keyEquivalent: '')
-    end.menu
 
     NSApp.helpMenu = addMenu('Help') do
       addItemWithTitle("#{appName} Help", action: 'showHelp:', keyEquivalent: '?')
