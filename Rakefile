@@ -12,5 +12,4 @@ Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Prompter'
   app.identifier = 'com.cyberfox.Prompter'
-  app.codesign_certificate = "3rd Party Mac Developer Application: CyberFOX Software, Inc. (S4CH5TG222)"
 end
