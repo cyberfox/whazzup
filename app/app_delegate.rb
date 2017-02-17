@@ -80,6 +80,8 @@ class AppDelegate
     alert.accessoryView = input_field
     alert.window.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces
     alert.window.level = NSFloatingWindowLevel
+    alert.window.setInitialFirstResponder(input_field)
+    alert.window.makeFirstResponder(input_field)
     button = alert.runModal
 
     answer = input_field.stringValue if button == 1
