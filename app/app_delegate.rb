@@ -36,8 +36,14 @@ class AppDelegate
 
   def ask_and_schedule
     @timer = nil
-    ask
-
+    begin
+      ask
+    rescue => e
+      alert = NSAlert.alertWithMessageText('Problem asking for input: ' + e.message,
+                      defaultButton: "OK", alternateButton: nil,
+                      otherButton: nil, informativeTextWithFormat: "")
+      alert.runModal
+    end
     # -5..5 + 20 yields a range of 15-25 minutes.
     wait_time = (((rand*10).to_i-5)+20)*60
     @timer = NSTimer.scheduledTimerWithTimeInterval(wait_time, target: self, selector: 'ask_and_schedule', userInfo: nil, repeats: false)
