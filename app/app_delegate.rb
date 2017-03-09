@@ -15,7 +15,7 @@ class AppDelegate
   def applicationDidFinishLaunching(notification)
     @snap_path = File.join(NSBundle.mainBundle.resourcePath, 'imagesnap')
     application_support = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, true).first
-    @snippet_path = File.join(application_support, 'Prompter', 'snippets')
+    @snippet_path = File.join(application_support, 'Whazzup', 'snippets')
     Motion::FileUtils.mkdir_p(@snippet_path) unless File.exist?(@snippet_path)
 
     prep_log
