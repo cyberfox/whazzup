@@ -10,6 +10,7 @@ end
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
-  app.name = 'Prompter'
-  app.identifier = 'com.cyberfox.Prompter'
+  app.name = 'Whazzup'
+  app.icon = "AppIcon.icns"
+  app.identifier = 'com.cyberfox.whazzup'
 end
