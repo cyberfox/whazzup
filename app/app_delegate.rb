@@ -1,4 +1,9 @@
 class AppDelegate
+  PREFS_DEFAULTS = {
+    'AskInterval' => 20,
+    'TakePictures' => NSOnState
+  }
+
   PROMPTS = ["What\'re you working on?",
              "What\'cha up to?",
              "What\'s going on?",
@@ -13,6 +18,7 @@ class AppDelegate
              "What\'s on your mind?"]
 
   def applicationDidFinishLaunching(notification)
+    NSUserDefaults.standardUserDefaults.registerDefaults PREFS_DEFAULTS
     @snap_path = File.join(NSBundle.mainBundle.resourcePath, 'imagesnap')
     application_support = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, true).first
     @snippet_path = File.join(application_support, 'Whazzup', 'snippets')
@@ -22,6 +28,13 @@ class AppDelegate
     buildMenu
     ask_and_schedule
   end
+
+  def openPreferences(sender)
+    @prefs_controller = PrefsWindowController.alloc.init
+    @prefs_controller.showWindow(self)
+    @prefs_controller.window.orderFrontRegardless
+  end
+
 
   def ask_early
     if @timer
@@ -46,7 +59,11 @@ class AppDelegate
       alert.runModal
     end
     # -5..5 + 20 yields a range of 15-25 minutes.
-    wait_time = (((rand*10).to_i-5)+20)*60
+
+    interval = NSUserDefaults.standardUserDefaults.integerForKey('AskInterval')
+    p interval
+
+    wait_time = (((rand*10).to_i-5)+interval)*60
     @timer = NSTimer.scheduledTimerWithTimeInterval(wait_time, target: self, selector: 'ask_and_schedule', userInfo: nil, repeats: false)
     old_app.activateWithOptions(NSApplicationActivateIgnoringOtherApps)
   end
@@ -57,8 +74,11 @@ class AppDelegate
   def ask
     suffix = FMT.stringFromDate Time.now
 
-    image = File.join(@snippet_path, "snippet-#{suffix}.png")
-    system("#{@snap_path.inspect} -w 0.5 #{image.inspect}")
+    if NSUserDefaults.standardUserDefaults.objectForKey('TakePictures') == NSOnState
+      image = File.join(@snippet_path, "snippet-#{suffix}.png")
+      system("#{@snap_path.inspect} -w 0.5 #{image.inspect}")
+    end
+
     picked = PROMPTS[rand*PROMPTS.length]
     answer = input(picked)
     log(answer)
