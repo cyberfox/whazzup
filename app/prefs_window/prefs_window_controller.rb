@@ -12,9 +12,17 @@ class PrefsWindowController < NSWindowController
       @button_take_picture.target = self
       @button_take_picture.action = 'checkboxClick:'
 
+      @button_close = @layout.get(:button_close)
+      @button_close.target = self
+      @button_close.action = 'closeWindow:'
+
       @time_interval = @layout.get(:time_interval)
       @time_interval.delegate = self
     end
+  end
+
+  def closeWindow(sender)
+    window.close
   end
 
   def checkboxClick(sender)
