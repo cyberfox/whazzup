@@ -61,7 +61,6 @@ class AppDelegate
     # -5..5 + 20 yields a range of 15-25 minutes.
 
     interval = NSUserDefaults.standardUserDefaults.integerForKey('AskInterval')
-    p interval
 
     wait_time = (((rand*10).to_i-5)+interval)*60
     @timer = NSTimer.scheduledTimerWithTimeInterval(wait_time, target: self, selector: 'ask_and_schedule', userInfo: nil, repeats: false)

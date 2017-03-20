@@ -5,9 +5,6 @@ class PrefsWindowController < NSWindowController
   end
 
   def init
-
-    debugSettings
-
     super.tap do
       self.window = layout.window
 
@@ -32,11 +29,5 @@ class PrefsWindowController < NSWindowController
       NSUserDefaults.standardUserDefaults.setObject(textField.stringValue,forKey:'AskInterval')
     end
   end
-
-  def debugSettings
-    p NSUserDefaults.standardUserDefaults.stringForKey('AskInterval')
-    p NSUserDefaults.standardUserDefaults.objectForKey('TakePictures')
-  end
-
 
 end
