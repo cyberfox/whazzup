@@ -1,7 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dbt (1.2.0)
     motion-fileutils (0.1.1)
+    motion-kit (1.1.1)
+      dbt (~> 1.1, >= 1.1.5)
     rake (10.1.0)
 
 PLATFORMS
@@ -9,7 +12,8 @@ PLATFORMS
 
 DEPENDENCIES
   motion-fileutils
+  motion-kit
   rake
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
