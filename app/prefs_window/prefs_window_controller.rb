@@ -1,5 +1,10 @@
-class PrefsWindowController < NSWindowController
+module EscCloseWindow
+  def cancelOperation(sender)
+    self.close
+  end
+end
 
+class PrefsWindowController < NSWindowController
   def layout
     @layout ||= PrefsWindowLayout.new
   end
@@ -7,6 +12,7 @@ class PrefsWindowController < NSWindowController
   def init
     super.tap do
       self.window = layout.window
+      self.window.extend(EscCloseWindow)
 
       @button_take_picture = @layout.get(:button_take_picture)
       @button_take_picture.target = self
@@ -19,6 +25,11 @@ class PrefsWindowController < NSWindowController
       @time_interval = @layout.get(:time_interval)
       @time_interval.delegate = self
     end
+  end
+
+  def performKeyEquivalent(theEvent)
+    puts "theEvent: "
+    NSLog "%@", theEvent
   end
 
   def closeWindow(sender)
