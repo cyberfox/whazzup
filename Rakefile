@@ -13,4 +13,5 @@ Motion::Project::App.setup do |app|
   app.name = 'Whazzup'
   app.icon = "AppIcon.icns"
   app.identifier = 'com.cyberfox.whazzup'
+  app.frameworks += %w(ScriptingBridge)
 end

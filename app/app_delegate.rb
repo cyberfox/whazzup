@@ -24,6 +24,7 @@ class AppDelegate
     @snippet_path = File.join(application_support, 'Whazzup', 'snippets')
     Motion::FileUtils.mkdir_p(@snippet_path) unless File.exist?(@snippet_path)
 
+    @last5 = []
     prep_log
     buildMenu
     ask_and_schedule
@@ -94,19 +95,39 @@ class AppDelegate
     @snippets.flush
   end
 
+  def tasks(n=5)
+    @hitlist.todayList.tasks.select do |task|
+      !task.properties['completed'] && !task.properties['canceled']
+    end.sort_by(&:priority)[0...n]
+  end
+
   def input(prompt, default_value="")
     alert = NSAlert.alertWithMessageText(prompt, defaultButton: "OK", alternateButton: "Cancel", otherButton: nil, informativeTextWithFormat: "")
-    input_field = NSTextField.alloc.initWithFrame(NSMakeRect(0, 0, 200, 24))
-    input_field.stringValue = default_value
-    alert.accessoryView = input_field
+
+    combo = NSComboBox.alloc.initWithFrame(NSMakeRect(0, 0, 200, 26))
+    combo.stringValue = default_value
+    @last5.each { |entry| combo.addItemWithObjectValue(entry) }
+
+    @hitlist = SBApplication.applicationWithBundleIdentifier("com.potionfactory.TheHitList")
+    tasks.each { |entry| combo.addItemWithObjectValue(entry.title) } unless @hitlist.nil?
+    combo.editable = true
+
+    alert.accessoryView = combo
     alert.window.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces
     alert.window.level = NSFloatingWindowLevel
-    alert.window.setInitialFirstResponder(input_field)
-    alert.window.makeFirstResponder(input_field)
+    alert.window.setInitialFirstResponder(combo)
+    alert.window.makeFirstResponder(combo)
     button = alert.runModal
 
-    answer = input_field.stringValue if button == 1
-    (answer.nil? || answer.empty?) ? '...' : answer
+    answer = combo.stringValue if button == 1
+    ((answer.nil? || answer.empty?) ? '...' : answer).tap do |entered|
+      if entered != '...'
+        idx = @last5.index(entered)
+        @last5.insert(0, entered)
+        @last5.delete_at(idx+1) if idx != nil
+        @last5 = @last5[0...5]
+      end
+    end
   end
 
   # Deprecated
