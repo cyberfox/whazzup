@@ -23,9 +23,8 @@ class AppDelegate
     application_support = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, true).first
     @snippet_path = File.join(application_support, 'Whazzup', 'snippets')
     Motion::FileUtils.mkdir_p(@snippet_path) unless File.exist?(@snippet_path)
-    @hitlist = SBApplication.applicationWithBundleIdentifier("com.potionfactory.TheHitList")
+    @tasks = Tasks.new
 
-    @last5 = []
     prep_log
     buildMenu
     ask_and_schedule
@@ -36,7 +35,6 @@ class AppDelegate
     @prefs_controller.showWindow(self)
     @prefs_controller.window.orderFrontRegardless
   end
-
 
   def ask_early
     if @timer
@@ -55,7 +53,7 @@ class AppDelegate
     begin
       ask
     rescue => e
-      alert = NSAlert.alertWithMessageText('Problem asking for input: ' + e.message,
+      alert = NSAlert.alertWithMessageText('Problem asking for input: ' + e.reason,
                       defaultButton: "OK", alternateButton: nil,
                       otherButton: nil, informativeTextWithFormat: "")
       alert.runModal
@@ -82,6 +80,7 @@ class AppDelegate
 
     picked = PROMPTS[rand*PROMPTS.length]
     answer = input(picked)
+    @tasks.refresh(answer) if answer != '...'
     log(answer)
   end
 
@@ -96,51 +95,12 @@ class AppDelegate
     @snippets.flush
   end
 
-  def hitlist_tasks(n=10)
-    @hitlist.todayList.tasks.select do |task|
-      !task.properties['completed'] && !task.properties['canceled']
-    end.sort_by(&:priority).each do |task|
-      yield task.title
-    end
-  end
-
-  def _tasks
-    return to_enum(:tasks) unless block_given?
-    done = Set.new
-    last5.each do |task|
-      done.add task
-      yield task
-    end
-
-    hitlist_tasks do |title|
-      yield title unless done.include? task.title
-    end
-  end
-
-  def tasks(n)
-    possible_tasks = _tasks
-    while n != 0
-      n -= 1
-      title = possible_tasks.next
-      puts title.inspect
-      yield title
-    end
-  rescue => e
-  end
-
-  def update_lru(task)
-    idx = @last5.index(task)
-    @last5.insert(0, task)
-    @last5.delete_at(idx+1) if idx != nil
-    @last5 = @last5[0...5]
-  end
-
   def input(prompt, default_value="")
     alert = NSAlert.alertWithMessageText(prompt, defaultButton: "OK", alternateButton: "Cancel", otherButton: nil, informativeTextWithFormat: "")
 
     combo = NSComboBox.alloc.initWithFrame(NSMakeRect(0, 0, 200, 26))
     combo.stringValue = default_value
-    tasks(10) { |title| combo.addItemWithObjectValue(title) }
+    @tasks.top(10).each { |title| combo.addItemWithObjectValue(title) }
     combo.editable = true
 
     alert.accessoryView = combo
@@ -151,22 +111,7 @@ class AppDelegate
     button = alert.runModal
 
     answer = combo.stringValue if button == 1
-    ((answer.nil? || answer.empty?) ? '...' : answer).tap do |entered|
-      if entered != '...'
-        update_lru(entered)
-      end
-    end
-  end
-
-  # Deprecated
-  def buildWindow
-    @mainWindow = NSWindow.alloc.initWithContentRect([[240, 180], [480, 360]],
-      styleMask: NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask,
-      backing: NSBackingStoreBuffered,
-      defer: false)
-    @mainWindow.title = NSBundle.mainBundle.infoDictionary['CFBundleName']
-    @mainWindow.orderFrontRegardless
-    input("What are you up to?")
+    (answer.nil? || answer.empty?) ? '...' : answer
   end
 
   def finderView
