@@ -23,6 +23,7 @@ class AppDelegate
     application_support = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, true).first
     @snippet_path = File.join(application_support, 'Whazzup', 'snippets')
     Motion::FileUtils.mkdir_p(@snippet_path) unless File.exist?(@snippet_path)
+    @hitlist = SBApplication.applicationWithBundleIdentifier("com.potionfactory.TheHitList")
 
     @last5 = []
     prep_log
@@ -95,10 +96,43 @@ class AppDelegate
     @snippets.flush
   end
 
-  def tasks(n=5)
+  def hitlist_tasks(n=10)
     @hitlist.todayList.tasks.select do |task|
       !task.properties['completed'] && !task.properties['canceled']
-    end.sort_by(&:priority)[0...n]
+    end.sort_by(&:priority).each do |task|
+      yield task.title
+    end
+  end
+
+  def _tasks
+    return to_enum(:tasks) unless block_given?
+    done = Set.new
+    last5.each do |task|
+      done.add task
+      yield task
+    end
+
+    hitlist_tasks do |title|
+      yield title unless done.include? task.title
+    end
+  end
+
+  def tasks(n)
+    possible_tasks = _tasks
+    while n != 0
+      n -= 1
+      title = possible_tasks.next
+      puts title.inspect
+      yield title
+    end
+  rescue => e
+  end
+
+  def update_lru(task)
+    idx = @last5.index(task)
+    @last5.insert(0, task)
+    @last5.delete_at(idx+1) if idx != nil
+    @last5 = @last5[0...5]
   end
 
   def input(prompt, default_value="")
@@ -106,10 +140,7 @@ class AppDelegate
 
     combo = NSComboBox.alloc.initWithFrame(NSMakeRect(0, 0, 200, 26))
     combo.stringValue = default_value
-    @last5.each { |entry| combo.addItemWithObjectValue(entry) }
-
-    @hitlist = SBApplication.applicationWithBundleIdentifier("com.potionfactory.TheHitList")
-    tasks.each { |entry| combo.addItemWithObjectValue(entry.title) } unless @hitlist.nil?
+    tasks(10) { |title| combo.addItemWithObjectValue(title) }
     combo.editable = true
 
     alert.accessoryView = combo
@@ -122,10 +153,7 @@ class AppDelegate
     answer = combo.stringValue if button == 1
     ((answer.nil? || answer.empty?) ? '...' : answer).tap do |entered|
       if entered != '...'
-        idx = @last5.index(entered)
-        @last5.insert(0, entered)
-        @last5.delete_at(idx+1) if idx != nil
-        @last5 = @last5[0...5]
+        update_lru(entered)
       end
     end
   end
