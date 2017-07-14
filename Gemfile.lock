@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/webcracy/motion-sparkle.git
+  revision: 371669bb58543572d65fec8bc1ddccb9d7c3f8cb
+  specs:
+    motion-sparkle (0.0.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -13,6 +19,7 @@ PLATFORMS
 DEPENDENCIES
   motion-fileutils
   motion-kit
+  motion-sparkle!
   rake
 
 BUNDLED WITH

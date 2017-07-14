@@ -8,6 +8,9 @@ class AppDelegate
       addItemWithTitle("About #{appName}", action: 'orderFrontStandardAboutPanel:', keyEquivalent: '')
       addItem(NSMenuItem.separatorItem)
       addItemWithTitle('Preferences', action: 'openPreferences:', keyEquivalent: ',')
+      sparkle = addItemWithTitle("Check for updates...", action: nil, keyEquivalent: '')
+      sparkle.setTarget SUUpdater.new
+      sparkle.setAction 'checkForUpdates:'
       addItem(NSMenuItem.separatorItem)
       addItemWithTitle("Hide #{appName}", action: 'hide:', keyEquivalent: 'h')
       item = addItemWithTitle('Hide Others', action: 'hideOtherApplications:', keyEquivalent: 'H')
