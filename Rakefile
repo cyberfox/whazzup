@@ -31,4 +31,8 @@ Motion::Project::App.setup do |app|
   end
 
   app.info_plist['LSUIElement'] = true # Prevent this app from showing up in ALT-TAB and the dock
+  app.info_plist['NSMainNibFile'] = 'MainMenu'
+
+  app.sdk_version='10.11'
+  app.deployment_target='10.11'
 end
