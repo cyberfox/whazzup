@@ -10,6 +10,11 @@ class AppDelegate
     @prompter = Prompter.new(@tasks)
 
     buildMenu
+    @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength).init.tap do |statusbar|
+      statusbar.setMenu @appmenu
+      statusbar.setImage(NSImage.imageNamed('179-notebook.png'))
+      statusbar.setHighlightMode(true)
+    end
   end
 
   def openPreferences(sender)

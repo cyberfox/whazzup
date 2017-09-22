@@ -3,7 +3,7 @@ class AppDelegate
     @mainMenu = NSMenu.new
 
     appName = NSBundle.mainBundle.infoDictionary['CFBundleName']
-    addMenu(appName) do
+    @appmenu = addMenu(appName) do
       addItemWithTitle('Ask', action: 'askEarly', keyEquivalent: '!')
       addItemWithTitle("About #{appName}", action: 'orderFrontStandardAboutPanel:', keyEquivalent: '')
       addItem(NSMenuItem.separatorItem)

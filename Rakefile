@@ -29,4 +29,6 @@ Motion::Project::App.setup do |app|
     release :notes_filename, 'whazzup_notes.html'
     release :package_filename, "#{app.name}.zip"
   end
+
+  app.info_plist['LSUIElement'] = true # Prevent this app from showing up in ALT-TAB and the dock
 end
