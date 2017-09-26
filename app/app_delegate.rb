@@ -36,7 +36,7 @@ class AppDelegate
 
     @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength).init.tap do |statusbar|
       statusbar.setMenu @appmenu
-      statusbar.setImage(NSImage.imageNamed('179-notebook.png'))
+      statusbar.setImage(NSImage.imageNamed('179-notepad-copy.png'))
       statusbar.setHighlightMode(true)
     end
   end
