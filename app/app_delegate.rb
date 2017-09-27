@@ -21,7 +21,7 @@ class AppDelegate
       menu.initWithTitle 'Whazzup!'
       menu.addItem NSMenuItem.separatorItem
       menu.addItem createMenuItem('Ask', 'askEarly', '!')
-      menu.addItem createMenuItem("About #{appName}", 'orderFrontStandardAboutPanel:')
+      menu.addItem createMenuItem("About #{appName}", 'orderFrontStandardAboutPanel:', '?', nil)
       menu.addItem NSMenuItem.separatorItem
       menu.addItem createMenuItem('Preferences', 'openPreferences:', ',')
       sparkle = createMenuItem("Check for updates...", nil)
@@ -31,7 +31,7 @@ class AppDelegate
       menu.addItem NSMenuItem.separatorItem
       menu.addItem createMenuItem('Show in Finder', 'finderView', 'i')
       menu.addItem NSMenuItem.separatorItem
-      menu.addItem createMenuItem("Quit #{appName}", 'terminate:', 'q')
+      menu.addItem createMenuItem("Quit #{appName}", 'terminate:', 'q', nil)
     end
 
     @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength).init.tap do |statusbar|
