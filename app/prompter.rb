@@ -1,3 +1,9 @@
+class MyAlert < NSAlert
+  def windowDidBecomeKey(notification)
+    self.accessoryView.becomeFirstResponder
+  end
+end
+
 class Prompter
   FMT = NSDateFormatter.new
   FMT.setDateFormat "ddMMYYYY-HHmmss"
@@ -83,7 +89,7 @@ class Prompter
   end
 
   def input(prompt, default_value="")
-    alert = NSAlert.alertWithMessageText(prompt, defaultButton: "OK", alternateButton: "Cancel", otherButton: nil, informativeTextWithFormat: "")
+    alert = MyAlert.alertWithMessageText(prompt, defaultButton: "OK", alternateButton: "Cancel", otherButton: nil, informativeTextWithFormat: "")
 
     combo = NSComboBox.alloc.initWithFrame(NSMakeRect(0, 0, 200, 26))
     combo.stringValue = default_value
@@ -93,8 +99,7 @@ class Prompter
     alert.accessoryView = combo
     alert.window.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces
     alert.window.level = NSFloatingWindowLevel
-    alert.window.setInitialFirstResponder(combo)
-    alert.window.makeFirstResponder(combo)
+    NSRunningApplication.currentApplication.activateWithOptions(NSApplicationActivateIgnoringOtherApps)
     button = alert.runModal
 
     answer = combo.stringValue if button == 1

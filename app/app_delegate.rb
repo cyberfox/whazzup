@@ -11,6 +11,11 @@ class AppDelegate
   def applicationDidFinishLaunching(notification)
     NSUserDefaults.standardUserDefaults.registerDefaults PREFS_DEFAULTS
     @tasks = Tasks.new
+
+    @mainMenu = NSMenu.new
+    @thingie = editMenu
+    NSApp.mainMenu = @mainMenu
+
     @prompter = Prompter.new(@tasks)
 
     appName = NSBundle.mainBundle.infoDictionary['CFBundleName']
