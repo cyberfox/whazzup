@@ -28,8 +28,8 @@ class AppDelegate
       menu.addItem createMenuItem('Preferences', 'openPreferences:', ',')
       sparkle = createMenuItem("Check for updates...", nil)
       menu.addItem sparkle
-#      sparkle.setTarget SUUpdater.new
-#      sparkle.setAction 'checkForUpdates:'
+      sparkle.setTarget SUUpdater.new
+      sparkle.setAction 'checkForUpdates:'
       menu.addItem NSMenuItem.separatorItem
       menu.addItem createMenuItem('Show in Finder', 'finderView', 'i')
       menu.addItem NSMenuItem.separatorItem
