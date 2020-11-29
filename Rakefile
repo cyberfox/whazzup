@@ -23,15 +23,5 @@ Motion::Project::App.setup do |app|
 
   app.codesign_for_release = false
 
-  app.sparkle do
-    release :base_url, 'https://cyberfox.com/updates'
-    release :feed_filename, 'whazzup.xml'
-    release :notes_filename, 'whazzup_notes.html'
-    release :package_filename, "#{app.name}.zip"
-  end
-
   app.info_plist['LSUIElement'] = true # Prevent this app from showing up in ALT-TAB and the dock
-
-  app.sdk_version='10.9'
-  app.deployment_target='10.9'
 end

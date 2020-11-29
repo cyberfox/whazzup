@@ -16,4 +16,5 @@ nbproject
 .idea
 sparkle/release
 sparkle/release/*
-sparkle/config/dsa_priv.pem
+sparkle/config/dsa_priv.pemsparkle/release
+sparkle/release/*
