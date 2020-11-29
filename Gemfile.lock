@@ -5,6 +5,7 @@ GEM
     motion-fileutils (0.1.1)
     motion-kit (1.1.1)
       dbt (~> 1.1, >= 1.1.5)
+    motion-sparkle-sandbox (2.0.0)
     rake (13.0.1)
 
 PLATFORMS
@@ -13,6 +14,7 @@ PLATFORMS
 DEPENDENCIES
   motion-fileutils
   motion-kit
+  motion-sparkle-sandbox
   rake
 
 BUNDLED WITH
